@@ -30,6 +30,6 @@ request sandesh IFMapNodeToUuidMappingReqIterate {
     1: string node_info;
 }
 
-request sandesh IFMapUuidtoNodeMappingReqIterate {
+request sandesh IFMapUuidToNodeMappingReqIterate {
     1: string uuid_info;
 }
