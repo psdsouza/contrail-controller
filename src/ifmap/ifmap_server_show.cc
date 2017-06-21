@@ -1533,20 +1533,20 @@ class ShowIFMapUuidToNodeMapping {
 public:
     static const int kMaxElementsPerRound = 50;
 
-    static bool ShowIFMapUuidToNodeMappingProcessReqCommon(
-        const IFMapUuidToNodeMappingReq *req, const string &last_uuid);
+    static bool ProcessRequestCommon(const IFMapUuidToNodeMappingReq *req,
+                                     const string &last_uuid);
 
-    static bool ShowIFMapUuidToNodeMappingProcessReq(
+    static bool ProcessRequest(
         const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
         int instNum, RequestPipeline::InstData *data);
 
-    static bool ShowIFMapUuidToNodeMappingProcessReqIterate(
+    static bool ProcessRequestIterate(
         const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
         int instNum, RequestPipeline::InstData *data);
 };
 
 static bool
-ShowIFMapUuidToNodeMapping::ShowIFMapUuidToNodeMappingProcessReqCommon(
+ShowIFMapUuidToNodeMapping::ProcessRequestCommon(
     const IFMapUuidToNodeMappingReq *req, const string &last_uuid) {
     IFMapSandeshContext *sctx =
         static_cast<IFMapSandeshContext *>(req->module_context("IFMap"));
@@ -1583,8 +1583,8 @@ ShowIFMapUuidToNodeMapping::ShowIFMapUuidToNodeMappingProcessReqCommon(
     return true;
 }
 
-static bool
-ShowIFMapUuidToNodeMapping::ShowIFMapUuidToNodeMappingProcessReqIterate(
+static bool 
+ShowIFMapUuidToNodeMapping::ProcessRequestIterate( 
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapUuidToNodeMappingReqIterate *request_iterate =
@@ -1592,19 +1592,19 @@ ShowIFMapUuidToNodeMapping::ShowIFMapUuidToNodeMappingProcessReqIterate(
     IFMapUuidToNodeMappingReq *request = new IFMapUuidToNodeMappingReq;
     request->set_context(request_iterate->context());
     string last_uuid = request_iterate->get_uuid_info();
-    ShowIFMapUuidToNodeMappingProcessReqCommon(request, last_uuid);
+    ProcessRequestCommon(request, last_uuid);
     request->Release();
     return true;
 }
 
 static bool
-ShowIFMapUuidToNodeMapping::ShowIFMapUuidToNodeMappingProcessReq(
+ShowIFMapUuidToNodeMapping::ProcessRequest(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapUuidToNodeMappingReq *request =
         static_cast<const IFMapUuidToNodeMappingReq *>(ps.snhRequest_.get());
     string last_uuid;
-    ShowIFMapUuidToNodeMappingProcessReqCommon(request, last_uuid);
+    ProcessRequestCommon(request, last_uuid);
     return true;
 }
 
@@ -1615,7 +1615,7 @@ void IFMapUuidToNodeMappingReq::HandleRequest() const {
     TaskScheduler *scheduler = TaskScheduler::GetInstance();
 
     s0.taskId_ = scheduler->GetTaskId("db::IFMapTable");
-    s0.cbFn_ = ShowIFMapUuidToNodeMappingProcessReq;
+    s0.cbFn_ = ShowIFMapUuidToNodeMapping::ProcessRequest;
     s0.instances_.push_back(0);
 
     RequestPipeline::PipeSpec ps(this);
@@ -1629,7 +1629,7 @@ void IFMapUuidToNodeMappingReqIterate::HandleRequest() const {
     TaskScheduler *scheduler = TaskScheduler::GetInstance();
 
     s0.taskId_ = scheduler->GetTaskId("db::IFMapTable");
-    s0.cbFn_ = ShowIFMapUuidToNodeMappingProcessReqIterate;
+    s0.cbFn_ = ShowIFMapUuidToNodeMapping::ProcessRequestIterate;
     s0.instances_.push_back(0);
 
     RequestPipeline::PipeSpec ps(this);
@@ -1641,19 +1641,19 @@ class ShowIFMapNodeToUuidMapping {
 public:
     static const int kMaxElementsPerRound = 50;
 
-    static bool ShowIFMapNodeToUuidMappingProcessReqCommon(
-        const IFMapNodeToUuidMappingReq *req, const string &last_uuid);
+    static bool ProcessRequestCommon(const IFMapNodeToUuidMappingReq *req,
+                                     const string &last_uuid);
 
-    static bool ShowIFMapNodeToUuidMappingProcessReq(
+    static bool ProcessRequest(
         const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
         int instNum, RequestPipeline::InstData *data);
 
-    static bool ShowIFMapNodeToUuidMappingProcessReqIterate(
+    static bool ProcessRequestIterate(
         const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
         int instNum, RequestPipeline::InstData *data);
 };
 
-static bool ShowIFMapNodeToUuidMapping::ShowIFMapNodeToUuidMappingProcessReqCommon(
+static bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
     const IFMapNodeToUuidMappingReq *req, const string &last_node_name) {
     IFMapSandeshContext *sctx =
         static_cast<IFMapSandeshContext *>(req->module_context("IFMap"));
@@ -1691,7 +1691,7 @@ static bool ShowIFMapNodeToUuidMapping::ShowIFMapNodeToUuidMappingProcessReqComm
 }
 
 static bool
-ShowIFMapNodeToUuidMapping::ShowIFMapNodeToUuidMappingProcessReqIterate(
+ShowIFMapNodeToUuidMapping::ProcessRequestIterate(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapNodeToUuidMappingReqIterate *request_iterate =
@@ -1705,8 +1705,7 @@ ShowIFMapNodeToUuidMapping::ShowIFMapNodeToUuidMappingProcessReqIterate(
     return true;
 }
 
-static bool
-ShowIFMapNodeToUuidMapping::ShowIFMapNodeToUuidMappingProcessReq(
+static bool ShowIFMapNodeToUuidMapping::ProcessRequest(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapNodeToUuidMappingReq *request =
@@ -1722,7 +1721,7 @@ void IFMapNodeToUuidMappingReq::HandleRequest() const {
     TaskScheduler *scheduler = TaskScheduler::GetInstance();
 
     s0.taskId_ = scheduler->GetTaskId("db::IFMapTable");
-    s0.cbFn_ = ShowIFMapNodeToUuidMappingProcessReq;
+    s0.cbFn_ = ShowIFMapNodeToUuidMapping::ProcessRequest;
     s0.instances_.push_back(0);
 
     RequestPipeline::PipeSpec ps(this);
@@ -1736,7 +1735,7 @@ void IFMapNodeToUuidMappingReqIterate::HandleRequest() const {
     TaskScheduler *scheduler = TaskScheduler::GetInstance();
 
     s0.taskId_ = scheduler->GetTaskId("db::IFMapTable");
-    s0.cbFn_ = ShowIFMapNodeToUuidMappingProcessReqIterate;
+    s0.cbFn_ = ShowIFMapNodeToUuidMapping::ProcessRequestIterate;
     s0.instances_.push_back(0);
 
     RequestPipeline::PipeSpec ps(this);
