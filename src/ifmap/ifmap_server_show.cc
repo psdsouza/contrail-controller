@@ -1545,8 +1545,7 @@ public:
         int instNum, RequestPipeline::InstData *data);
 };
 
-static bool
-ShowIFMapUuidToNodeMapping::ProcessRequestCommon(
+bool ShowIFMapUuidToNodeMapping::ProcessRequestCommon(
     const IFMapUuidToNodeMappingReq *req, const string &last_uuid) {
     IFMapSandeshContext *sctx =
         static_cast<IFMapSandeshContext *>(req->module_context("IFMap"));
@@ -1583,8 +1582,7 @@ ShowIFMapUuidToNodeMapping::ProcessRequestCommon(
     return true;
 }
 
-static bool 
-ShowIFMapUuidToNodeMapping::ProcessRequestIterate( 
+bool ShowIFMapUuidToNodeMapping::ProcessRequestIterate( 
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapUuidToNodeMappingReqIterate *request_iterate =
@@ -1597,8 +1595,7 @@ ShowIFMapUuidToNodeMapping::ProcessRequestIterate(
     return true;
 }
 
-static bool
-ShowIFMapUuidToNodeMapping::ProcessRequest(
+bool ShowIFMapUuidToNodeMapping::ProcessRequest(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapUuidToNodeMappingReq *request =
@@ -1653,7 +1650,7 @@ public:
         int instNum, RequestPipeline::InstData *data);
 };
 
-static bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
+bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
     const IFMapNodeToUuidMappingReq *req, const string &last_node_name) {
     IFMapSandeshContext *sctx =
         static_cast<IFMapSandeshContext *>(req->module_context("IFMap"));
@@ -1690,8 +1687,7 @@ static bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
          return true;
 }
 
-static bool
-ShowIFMapNodeToUuidMapping::ProcessRequestIterate(
+bool ShowIFMapNodeToUuidMapping::ProcessRequestIterate(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapNodeToUuidMappingReqIterate *request_iterate =
@@ -1700,18 +1696,18 @@ ShowIFMapNodeToUuidMapping::ProcessRequestIterate(
     IFMapNodeToUuidMappingReq *request = new IFMapNodeToUuidMappingReq;
     request->set_context(request_iterate->context());
     string last_node_name = request_iterate->get_node_info();
-    ShowIFMapNodeToUuidMappingProcessReqCommon(request, last_node_name);
+    ProcessRequestCommon(request, last_node_name);
     request->Release();
     return true;
 }
 
-static bool ShowIFMapNodeToUuidMapping::ProcessRequest(
+bool ShowIFMapNodeToUuidMapping::ProcessRequest(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapNodeToUuidMappingReq *request =
         static_cast<const IFMapNodeToUuidMappingReq *>(ps.snhRequest_.get());
     string last_node_name;
-    ShowIFMapNodeToUuidMappingProcessReqCommon(request, last_node_name);
+    ProcessRequestCommon(request, last_node_name);
     return true;
 }
 
