@@ -66,9 +66,10 @@ class IFMapVmUuidMapperTest : public ::testing::Test {
         const IFMapUuidToNodeMappingResp* resp =
             dynamic_cast<const IFMapUuidToNodeMappingResp*>(sandesh);
         TASK_UTIL_EXPECT_TRUE(resp != NULL);
-        TASK_UTIL_EXPECT_EQ(expected_results.size(), resp->get_map_count());
-        TASK_UTIL_EXPECT_TRUE((resp->get_more() == false);
-        for (size_t i = 0; i < resp->get_map_count(); ++i) {
+        TASK_UTIL_EXPECT_EQ((int)expected_results.size(),
+                            resp->get_map_count());
+        TASK_UTIL_EXPECT_TRUE(resp->get_more() == false);
+        for (int i = 0; i < resp->get_map_count(); ++i) {
             TASK_UTIL_EXPECT_EQ(
                 expected_results[i], resp->get_uuid_to_node_map()[i].get_uuid()
                 + ':' + resp->get_uuid_to_node_map()[i].get_node_name());
@@ -81,9 +82,10 @@ class IFMapVmUuidMapperTest : public ::testing::Test {
         const IFMapNodeToUuidMappingResp* resp =
             dynamic_cast<const IFMapNodeToUuidMappingResp*>(sandesh);
         TASK_UTIL_EXPECT_TRUE(resp != NULL);
-        TASK_UTIL_EXPECT_EQ(expected_results.size(), resp->get_map_count());
-        TASK_UTIL_EXPECT_TRUE((resp->get_more() == false);
-        for (size_t i = 0; i < resp->get_map_count(); ++i) {
+        TASK_UTIL_EXPECT_EQ(int) expected_results.size(),
+            resp->get_map_count());
+        TASK_UTIL_EXPECT_TRUE(resp->get_more() == false);
+        for (int i = 0; i < resp->get_map_count(); ++i) {
             TASK_UTIL_EXPECT_EQ(
                 expected_results[i], resp->get_node_to_uuid_map()[i].get_uuid()
                 + ':' + resp->get_node_to_uuid_map()[i].get_node_name());
