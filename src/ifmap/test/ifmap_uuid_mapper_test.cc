@@ -302,7 +302,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingReq) {
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapUuidToNodeMappingResponse,
-            this, _1, uuid_to_node_expected_results));
+            this, _1, uuid_to_node_expected_results, next_batch));
     IFMapUuidToNodeMappingReq* req = new IFMapUuidToNodeMappingReq;
     req->HandleRequest();
     req->Release();
@@ -352,7 +352,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingIterate) {
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapUuidToNodeMappingResponse,
-            this, _1, uuid_to_node_expected_results));
+            this, _1, uuid_to_node_expected_results, next_batch));
     IFMapUuidToNodeMappingReqIterate* req =
         new IFMapUuidToNodeMappingReqIterate;
     req->set_uuid_info("2d308482-c7b3-4e05-af14-e732b7b50117");
@@ -580,7 +580,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         EXPECT_EQ(name_list[idx], vm->name());
     };
 
-    std::vector<string> uuid_to_node_expected_results =
+    std::vector<string> node_to_uuid_expected_results =
         list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
         ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
@@ -591,7 +591,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapNodeToUuidMappingResponse,
-            this, _1, expected_result));
+            this, _1, node_to_uuid_expected_results, next_batch));
     IFMapNodeToUuidMappingReq* req = new IFMapoNodeToUuidMappingReq;
     req->HandleRequest();
     req->Release();
@@ -637,7 +637,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
         EXPECT_EQ(name_list[idx], vm->name());
     };
 
-    std::vector<string> uuid_to_node_expected_results =
+    std::vector<string> node_to_uuid_expected_results =
         list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
         ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
     string next_batch;
@@ -647,7 +647,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapNodeToUuidMappingResponse,
-            this, _1, expected_result));
+            this, _1, node_to_uuid_expected_results, next_batch));
     IFMapNodeToUuidMappingReqIterate* req =
         new IFMapoNodeToUuidMappingReqIterate;
     req->set_next_batch("2d308482-c7b3-4e05-af14-e732b7b50117");
