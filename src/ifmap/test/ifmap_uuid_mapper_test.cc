@@ -220,7 +220,8 @@ class IFMapVmUuidMapperTestWithParam1
 };
 
 class IFMapVmUuidMapperTestWithParam3
-    : public IFMapVmUuidMapperTestWithParam1 {
+    : public IFMapVmUuidMapperTest,
+    public ::testing::WithParamInterface<string> {
 };
 
 // Receive config first and then vm-sub
