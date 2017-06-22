@@ -392,7 +392,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam1, VmSubUnsubWithDeletedNode) {
 
 // Simulate receiving a vm-subscribe for the second VM after the VM node is
 // deleted. The second VM should show up in the pending list.
-    vm = vm_uuid_mapper_->GetVmNodeByUuid(
+    IFMapNode* vm = vm_uuid_mapper_->GetVmNodeByUuid(
         "93e76278-1990-4905-a472-8e9188f41b2c");
     EXPECT_TRUE(vm != NULL);
     TASK_UTIL_ASSERT_TRUE(
@@ -563,8 +563,8 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
     { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
     int idx = -1;
     for (IFMapVmUuidMapper::NodeUuidMap::const_iterator iter =
-         mapper->node_uuid_map_.begin();
-         iter != mapper->node_uuid_map_.end(); ++iter) {
+         vm_uuid_mapper->node_uuid_map_.begin();
+         iter != vm_uuid_mapper->node_uuid_map_.end(); ++iter) {
         idx++;
         IFMapNode* node = static_cast<IFMapNode*>(iter->first);
         EXPECT_EQ(name_list[idx], node->ToString());
@@ -592,7 +592,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapNodeToUuidMappingResponse,
             this, _1, node_to_uuid_expected_results, next_batch));
-    IFMapNodeToUuidMappingReq* req = new IFMapoNodeToUuidMappingReq;
+    IFMapNodeToUuidMappingReq* req = new IFMapNodeToUuidMappingReq;
     req->HandleRequest();
     req->Release();
     TASK_UTIL_EXPECT_TRUE(validate_done_);
@@ -620,8 +620,8 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
     { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
     int idx = -1;
     for (IFMapVmUuidMapper::NodeUuidMap::const_iterator iter =
-         mapper->node_uuid_map_.begin();
-         iter != mapper->node_uuid_map_.end(); ++iter) {
+         vm_uuid_mapper->node_uuid_map_.begin();
+         iter != vm_uuid_mapper->node_uuid_map_.end(); ++iter) {
         idx++;
         IFMapNode* node = static_cast<IFMapNode*>(iter->first);
         EXPECT_EQ(name_list[idx], node->ToString());
@@ -650,7 +650,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
             this, _1, node_to_uuid_expected_results, next_batch));
     IFMapNodeToUuidMappingReqIterate* req =
         new IFMapoNodeToUuidMappingReqIterate;
-    req->set_next_batch("2d308482-c7b3-4e05-af14-e732b7b50117");
+    req->set_uuid_info("2d308482-c7b3-4e05-af14-e732b7b50117");
     req->HandleRequest();
     req->Release();
     TASK_UTIL_EXPECT_TRUE(validate_done_);
