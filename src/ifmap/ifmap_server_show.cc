@@ -1659,12 +1659,11 @@ bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
         sctx->page_limit() : kMaxElementsPerRound;
 
     IFMapVmUuidMapper *mapper = sctx->ifmap_server()->vm_uuid_mapper();
-    IFMapUuidMapper &uuid_mapper = mapper->uuid_mapper_;
 
     vector<IFMapNodeToUuidMappingEntry> dest_buffer;
     IFMapVmUuidMapper::NodeUuidMap::const_iterator iter;
     if (last_uuid.size()) {
-        IFMapNode *vm = uuid_mapper_->GetVmNodeByUuid(last_uuid);
+        IFMapNode *vm = mapper->GetVmNodeByUuid(last_uuid);
         iter = mapper->node_uuid_map_.upper_bound(vm);
     } else {
         iter = mapper->node_uuid_map_.begin();
