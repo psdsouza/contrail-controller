@@ -27,7 +27,7 @@ request sandesh ConfigDBUUIDCacheReqIterate {
 }
 
 request sandesh IFMapNodeToUuidMappingReqIterate {
-    1: string node_info;
+    1: string uuid_info;
 }
 
 request sandesh IFMapUuidToNodeMappingReqIterate {
