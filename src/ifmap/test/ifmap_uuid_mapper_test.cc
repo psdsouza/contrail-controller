@@ -187,7 +187,19 @@ class IFMapVmUuidMapperTest : public ::testing::Test {
     void FeedEventsJson() {
         ConfigCassandraClientTest::FeedEventsJson(config_client_manager_.get());
     }
-
+    
+    void ValidateNodeToUuidMapEntries(vector<string>& name_list,
+                                      vector<string>& uuid_list) {
+        int idx = -1;
+        for (IFMapVmUuidMapper::NodeUuidMap::const_iterator iter =
+             vm_uuid_mapper_->node_uuid_map_.begin();
+              iter != vm_uuid_mapper_->node_uuid_map_.end(); ++iter) {
+            idx++;
+            IFMapNode* node = static_cast<IFMapNode*>(iter->first);
+            EXPECT_EQ(name_list[idx], node->ToString());
+            EXPECT_EQ(uuid_list[idx], iter->second);
+        }
+    }
     EventManager evm_;
     ServerThread thread_;
     DB db_;
@@ -561,16 +573,8 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         "93e76278-1990-4905-a472-8e9188f41b2c" };
     string name_list[] =
     { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
+    ValidateNodeToUuidMapEntries(name_list, uuid_list);
     int idx = -1;
-    for (IFMapVmUuidMapper::NodeUuidMap::const_iterator iter =
-         vm_uuid_mapper_->node_uuid_map_.begin();
-         iter != vm_uuid_mapper_->node_uuid_map_.end(); ++iter) {
-        idx++;
-        IFMapNode* node = static_cast<IFMapNode*>(iter->first);
-        EXPECT_EQ(name_list[idx], node->ToString());
-        EXPECT_EQ(uuid_list[idx], iter->second);
-    }
-    idx = -1;
     BOOST_FOREACH(string uuid, uuid_list) {
         idx++;
         IFMapNode* vm = vm_uuid_mapper_->GetVmNodeByUuid(uuid);
@@ -618,16 +622,8 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
         "93e76278-1990-4905-a472-8e9188f41b2c" };
     string name_list[] =
     { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
+    ValidateNodeToUuidMapEntries(name_list, uuid_list);
     int idx = -1;
-    for (IFMapVmUuidMapper::NodeUuidMap::const_iterator iter =
-         vm_uuid_mapper_->node_uuid_map_.begin();
-         iter != vm_uuid_mapper_->node_uuid_map_.end(); ++iter) {
-        idx++;
-        IFMapNode* node = static_cast<IFMapNode*>(iter->first);
-        EXPECT_EQ(name_list[idx], node->ToString());
-        EXPECT_EQ(uuid_list[idx], iter->second);
-    }
-    idx = -1;
     BOOST_FOREACH(string uuid, uuid_list) {
         idx++;
         IFMapNode* vm = vm_uuid_mapper_->GetVmNodeByUuid(uuid);
