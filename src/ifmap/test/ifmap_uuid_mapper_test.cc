@@ -571,9 +571,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
     string uuid_list[] = { "2d308482-c7b3-4e05-af14-e732b7b50117",
         "43d086ab-52c4-4a1f-8c3d-63b321e36e8a",
         "93e76278-1990-4905-a472-8e9188f41b2c" };
-    string name_list[] =
-    { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
-    ValidateNodeToUuidMapEntries(name_list, uuid_list);
+    string name_list[] = 
+        { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
+    IFMapVmUuidMapperTest::ValidateNodeToUuidMapEntries(name_list, uuid_list);
     int idx = -1;
     BOOST_FOREACH(string uuid, uuid_list) {
         idx++;
@@ -622,7 +622,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
         "93e76278-1990-4905-a472-8e9188f41b2c" };
     string name_list[] =
     { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
-    ValidateNodeToUuidMapEntries(name_list, uuid_list);
+    IFMapVmUuidMapperTest::ValidateNodeToUuidMapEntries(name_list, uuid_list);
     int idx = -1;
     BOOST_FOREACH(string uuid, uuid_list) {
         idx++;
