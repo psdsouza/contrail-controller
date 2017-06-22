@@ -68,13 +68,13 @@ class IFMapVmUuidMapperTest : public ::testing::Test {
         TASK_UTIL_EXPECT_TRUE(resp != NULL);
         TASK_UTIL_EXPECT_EQ(expected_results.size(), resp->get_map_count());
         TASK_UTIL_EXPECT_TRUE((resp->get_more() == false);
-                              for (size_t i = 0; i < resp->get_map_count(); ++i) {
+        for (size_t i = 0; i < resp->get_map_count(); ++i) {
             TASK_UTIL_EXPECT_EQ(
                 expected_results[i], resp->get_uuid_to_node_map()[i].get_uuid()
                 + ':' + resp->get_uuid_to_node_map()[i].get_node_name());
         }
-                              TASK_UTIL_EXPECT_EQ(next_batch, resp->get_next_batch());
-                              validate_done_ = true;
+        TASK_UTIL_EXPECT_EQ(next_batch, resp->get_next_batch());
+        validate_done_ = true;
     }
     void ValidateIFMapNodeToUuidMappingResponse(
         Sandesh* sandesh, vector<string> expected_results, string next_batch) {
@@ -83,13 +83,13 @@ class IFMapVmUuidMapperTest : public ::testing::Test {
         TASK_UTIL_EXPECT_TRUE(resp != NULL);
         TASK_UTIL_EXPECT_EQ(expected_results.size(), resp->get_map_count());
         TASK_UTIL_EXPECT_TRUE((resp->get_more() == false);
-                              for (size_t i = 0; i < resp->get_map_count(); ++i) {
+        for (size_t i = 0; i < resp->get_map_count(); ++i) {
             TASK_UTIL_EXPECT_EQ(
                 expected_results[i], resp->get_node_to_uuid_map()[i].get_uuid()
                 + ':' + resp->get_node_to_uuid_map()[i].get_node_name());
         }
-                              TASK_UTIL_EXPECT_EQ(next_batch, resp->get_next_batch());
-                              validate_done_ = true;
+        TASK_UTIL_EXPECT_EQ(next_batch, resp->get_next_batch());
+        validate_done_ = true;
     }
  protected:
     IFMapVmUuidMapperTest() :
@@ -582,7 +582,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
         ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
 
-        string next_batch = list_of("vm_with_a_name2")
+        string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
     TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
@@ -648,7 +648,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
             this, _1, expected_result));
     IFMapNodeToUuidMappingReqIterate* req =
         new IFMapoNodeToUuidMappingReqIterate;
-    req->set_next_batch("vm_with_a_name1");
+    req->set_next_batch("2d308482-c7b3-4e05-af14-e732b7b50117");
     req->HandleRequest();
     req->Release();
     TASK_UTIL_EXPECT_TRUE(validate_done_);

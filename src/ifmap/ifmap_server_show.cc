@@ -83,43 +83,43 @@ public:
             dest->obj_info.push_back(dest_obj);
         }
         if (src_node->IsVertexValid()){
-                DBGraph *graph = server->graph();
-                int neighbor_count = 0;
-                for(DBGraphVertex::adjacency_iterator iter =
-                    src_node->begin(graph);
-                    iter != src_node->end(graph);
-                    ++iter){
-                    ++neighbor_count;
+            DBGraph *graph = server->graph();
+            int neighbor_count = 0;
+            for(DBGraphVertex::adjacency_iterator iter =
+                src_node->begin(graph);
+                iter != src_node->end(graph);
+                ++iter){
+                ++neighbor_count;
             }
-                dest->neighbors.reserve(neighbor_count);
-                for(DBGraphVertex::adjacency_iterator iter =
-                    src_node->begin(graph);
-                    iter != src_node->end(graph);
-                    ++iter){
-                    IFMapNode *adj = static_cast<IFMapNode *>(iter.operator->());
-                    dest->neighbors.push_back(adj->ToString());
+            dest->neighbors.reserve(neighbor_count);
+            for(DBGraphVertex::adjacency_iterator iter =
+                src_node->begin(graph);
+                iter != src_node->end(graph);
+                ++iter){
+                IFMapNode *adj = static_cast<IFMapNode *>(iter.operator->());
+                dest->neighbors.push_back(adj->ToString());
             }
         }
-            dest->last_modified = src_node->last_change_at_str();
+        dest->last_modified = src_node->last_change_at_str();
     }
 
-        string GetIFMapObjectData(const IFMapObject *src_obj) {
-            pugi::xml_document xdoc;
-            pugi::xml_node xnode = xdoc.append_child("iq");
-            src_obj->EncodeUpdate(&xnode);
+    string GetIFMapObjectData(const IFMapObject *src_obj) {
+        pugi::xml_document xdoc;
+        pugi::xml_node xnode = xdoc.append_child("iq");
+        src_obj->EncodeUpdate(&xnode);
 
-            ostringstream oss;
-            xnode.print(oss);
-            string objdata = oss.str();
-            return objdata;
+        ostringstream oss;
+        xnode.print(oss);
+        string objdata = oss.str();
+        return objdata;
     }
 };
 
-    const string kShowIterSeparator = "||";
+const string kShowIterSeparator = "||";
 
 // almost everything in this class is static since we dont really want to
 // intantiate this class
-    class ShowIFMapTable {
+class ShowIFMapTable {
 public:
     static const uint32_t kMaxElementsPerRound = 50;
 
@@ -1582,11 +1582,12 @@ bool ShowIFMapUuidToNodeMapping::ProcessRequestCommon(
     return true;
 }
 
-bool ShowIFMapUuidToNodeMapping::ProcessRequestIterate( 
+bool ShowIFMapUuidToNodeMapping::ProcessRequestIterate(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const IFMapUuidToNodeMappingReqIterate *request_iterate =
-        static_cast<const IFMapUuidToNodeMappingReqIterate *>(ps.snhRequest_.get());
+        static_cast<const IFMapUuidToNodeMappingReqIterate *>
+            (ps.snhRequest_.get());
     IFMapUuidToNodeMappingReq *request = new IFMapUuidToNodeMappingReq;
     request->set_context(request_iterate->context());
     string last_uuid = request_iterate->get_uuid_info();
@@ -1651,7 +1652,7 @@ public:
 };
 
 bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
-    const IFMapNodeToUuidMappingReq *req, const string &last_node_name) {
+    const IFMapNodeToUuidMappingReq *req, const string &last_uuid) {
     IFMapSandeshContext *sctx =
         static_cast<IFMapSandeshContext *>(req->module_context("IFMap"));
     uint32_t page_limit = sctx->page_limit() ?
@@ -1661,30 +1662,31 @@ bool ShowIFMapNodeToUuidMapping::ProcessRequestCommon(
 
     vector<IFMapNodeToUuidMappingEntry> dest_buffer;
     IFMapVmUuidMapper::NodeUuidMap::const_iterator iter;
-    if (last_node_name.size()) {
-        iter =  mapper->node_uuid_map_.upper_bound(last_node_name);
+    if (last_uuid.size()) {
+        IFMapNode *vm = vm_uuid_mapper_->GetVmNodeByUuid(last_uuid);
+        iter = mapper->node_uuid_map_.upper_bound(vm);
     } else {
         iter = mapper->node_uuid_map_.begin();
     }
     IFMapNode *node;
-    for (uint32_t iter_count=0;(iter_count != page_limit)&&
-         (iter != mapper->node_uuid_map_.end()); iter++,iter_count++) {
+    for (uint32_t iter_count = 0; (iter_count != page_limit) &&
+         (iter != mapper->node_uuid_map_.end()); iter++, iter_count++) {
         IFMapNodeToUuidMappingEntry dest;
         node = static_cast<IFMapNode *>(iter->first);
         dest.set_node_name(node->ToString());
         dest.set_uuid(iter->second);
         dest_buffer.push_back(dest);
     }
-         IFMapNodeToUuidMappingResp *response = new IFMapNodeToUuidMappingResp();
-         response->set_map_count(dest_buffer.size());
-         response->set_node_to_uuid_map(dest_buffer);
-         if (iter++ != mapper->node_uuid_map_.end()) {
-        response->set_next_batch(node->ToString());
+    IFMapNodeToUuidMappingResp *response = new IFMapNodeToUuidMappingResp();
+    response->set_map_count(dest_buffer.size());
+    response->set_node_to_uuid_map(dest_buffer);
+    if (iter++ != mapper->node_uuid_map_.end()) {
+        response->set_next_batch(iter->second);
     }
-         response->set_context(req->context());
-         response->set_more(false);
-         response->Response();
-         return true;
+    response->set_context(req->context());
+    response->set_more(false);
+    response->Response();
+    return true;
 }
 
 bool ShowIFMapNodeToUuidMapping::ProcessRequestIterate(
@@ -1695,10 +1697,10 @@ bool ShowIFMapNodeToUuidMapping::ProcessRequestIterate(
                         *>(ps.snhRequest_.get());
     IFMapNodeToUuidMappingReq *request = new IFMapNodeToUuidMappingReq;
     request->set_context(request_iterate->context());
-    string last_node_name = request_iterate->get_node_info();
-    ProcessRequestCommon(request, last_node_name);
-    request->Release();
-    return true;
+    string last_uuid = request_iterate->get_uuid_info(); 
+    ProcessRequestCommon(request, last_uuid);
+    request->Release(); return 
+    true;
 }
 
 bool ShowIFMapNodeToUuidMapping::ProcessRequest(
@@ -1706,8 +1708,8 @@ bool ShowIFMapNodeToUuidMapping::ProcessRequest(
     int instNum, RequestPipeline::InstData *data) {
     const IFMapNodeToUuidMappingReq *request =
         static_cast<const IFMapNodeToUuidMappingReq *>(ps.snhRequest_.get());
-    string last_node_name;
-    ProcessRequestCommon(request, last_node_name);
+    string last_uuid;
+    ProcessRequestCommon(request, last_uuid);
     return true;
 }
 
@@ -2183,9 +2185,9 @@ public:
     static bool BufferStage(const Sandesh *sr,
                             const RequestPipeline::PipeSpec ps, int stage,
                             int instNum, RequestPipeline::InstData *data);
-    static bool BufferStageIterate(const Sandesh *sr,
-                                   const RequestPipeline::PipeSpec ps, int stage,
-                                   int instNum, RequestPipeline::InstData *data);
+    static bool BufferStageIterate(
+        const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
+        int instNum, RequestPipeline::InstData *data);
     static void SendStageCommon(const ConfigDBUUIDToFQNameReq *request,
                                 const RequestPipeline::PipeSpec ps,
                                 ConfigDBUUIDToFQNameResp *response);
@@ -2301,7 +2303,8 @@ bool ShowConfigDBUUIDToFQName::SendStageIterate(
     const Sandesh *sr, const RequestPipeline::PipeSpec ps, int stage,
     int instNum, RequestPipeline::InstData *data) {
     const ConfigDBUUIDToFQNameReqIterate *request_iterate =
-        static_cast<const ConfigDBUUIDToFQNameReqIterate *>(ps.snhRequest_.get());
+        static_cast<const ConfigDBUUIDToFQNameReqIterate *>
+            (ps.snhRequest_.get());
 
     ConfigDBUUIDToFQNameResp *response = new ConfigDBUUIDToFQNameResp;
     ConfigDBUUIDToFQNameReq *request = new ConfigDBUUIDToFQNameReq;
