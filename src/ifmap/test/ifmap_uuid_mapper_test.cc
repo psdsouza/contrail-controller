@@ -293,9 +293,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingReq) {
     };
     std::vector<string> uuid_to_node_expected_results =
         list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
-        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
+        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
-        string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
+    string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
     TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
@@ -582,9 +582,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
 
     std::vector<string> uuid_to_node_expected_results =
         list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
-        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
+        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
-        string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
+    string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
     TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
