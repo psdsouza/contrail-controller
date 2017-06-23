@@ -294,7 +294,11 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingReq) {
         "43d086ab-52c4-4a1f-8c3d-63b321e36e8a",
         "93e76278-1990-4905-a472-8e9188f41b2c" };
     string name_list[] =
-    { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
+    {
+        "virtual-machine:vm_with_a_name1",
+        "virtual-machine:vm_with_a_name2", 
+        "virtual-machine:vm_with_a_name3"
+    };
     int idx = -1;
     BOOST_FOREACH(const string uuid, uuid_list) {
         idx++;
@@ -304,9 +308,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingReq) {
             vm->Find(IFMapOrigin(IFMapOrigin::CASSANDRA)) != NULL);
         EXPECT_EQ(name_list[idx], vm->ToString());
     };
-    std::vector<string> uuid_to_node_expected_results =
-        list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
-        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
+    std::vector<string> uuid_to_node_expected_results = list_of(
+        "virtual-machine:vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
+        ("virtual-machine:vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
     string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
         validate_done_ = false;
@@ -344,7 +348,10 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingIterate) {
         "43d086ab-52c4-4a1f-8c3d-63b321e36e8a",
         "93e76278-1990-4905-a472-8e9188f41b2c" };
     string name_list[] =
-    { "vm_with_a_name1", "vm_with_a_name2", "vm_with_a_name3" };
+    { 
+        "virtual-machine:vm_with_a_name1",
+        "virtual-machine:vm_with_a_name2",
+        "virtual-machine:vm_with_a_name3" };
     int idx = -1;
     BOOST_FOREACH(const string uuid, uuid_list) {
         idx++;
@@ -354,9 +361,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingIterate) {
             vm->Find(IFMapOrigin(IFMapOrigin::CASSANDRA)) != NULL);
         EXPECT_EQ(name_list[idx], vm->ToString());
     };
-    std::vector<string> uuid_to_node_expected_results =
-        list_of("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
-        ("vm_with_a_name3:93e76278-1990-4905-a472-8e9188f41b2c");
+    std::vector<string> uuid_to_node_expected_results = list_of(
+        "virtual-machone:vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
+        ("virtual-machone:vm_with_a_name3:93e76278-1990-4905-a472-8e9188f41b2c");
     string next_batch;
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
@@ -572,9 +579,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         ("43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
         ("93e76278-1990-4905-a472-8e9188f41b2c");
     vector<string> name_list = 
-        list_of("vm_with_a_name1")
-        ("vm_with_a_name2")
-        ("vm_with_a_name3");
+        list_of("virtual-machine:vm_with_a_name1")
+        ("virtual-machine:vm_with_a_name2")
+        ("virtual-machine:vm_with_a_name3");
     IFMapVmUuidMapperTest::ValidateNodeToUuidMapEntries(name_list, uuid_list);
     int idx = -1;
     BOOST_FOREACH(string uuid, uuid_list) {
@@ -586,9 +593,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         EXPECT_EQ(name_list[idx], vm->name());
     };
 
-    std::vector<string> node_to_uuid_expected_results =
-        list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
-        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
+    std::vector<string> node_to_uuid_expected_results = list_of(
+        "virtual-machine:vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
+        ("virtual-machine:vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
     string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
         validate_done_ = false;
@@ -623,9 +630,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
         ("43d086ab-52c4-4a1f-8c3d-63b321e36e8a")
         ("93e76278-1990-4905-a472-8e9188f41b2c");
     vector<string> name_list = 
-        list_of("vm_with_a_name1")
-        ("vm_with_a_name2")
-        ("vm_with_a_name3");
+        list_of("virtual-machine:vm_with_a_name1")
+        ("virtual-machine:vm_with_a_name2")
+        ("virtual-machine:vm_with_a_name3");
     IFMapVmUuidMapperTest::ValidateNodeToUuidMapEntries(name_list, uuid_list);
     int idx = -1;
     BOOST_FOREACH(string uuid, uuid_list) {
@@ -637,9 +644,9 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
         EXPECT_EQ(name_list[idx], vm->name());
     };
 
-    std::vector<string> node_to_uuid_expected_results =
-        list_of("vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
-        ("vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
+    std::vector<string> node_to_uuid_expected_results = list_of(
+        "virtual-machine:vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
+        ("virtual-machine:vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
     string next_batch;
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
