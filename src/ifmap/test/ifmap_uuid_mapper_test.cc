@@ -312,7 +312,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingReq) {
         "virtual-machine:vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
         ("virtual-machine:vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
-    string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
+    string next_batch = "43d086ab-52c4-4a1f-8c3d-63b321e36e8a";
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
     Sandesh::set_response_callback(
@@ -597,7 +597,7 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
         "virtual-machine:vm_with_a_name1:2d308482-c7b3-4e05-af14-e732b7b50117")
         ("virtual-machine:vm_with_a_name2:43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
 
-    string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
+    string next_batch = "43d086ab-52c4-4a1f-8c3d-63b321e36e8a";
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
     Sandesh::set_response_callback(
