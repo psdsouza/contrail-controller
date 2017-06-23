@@ -2214,9 +2214,9 @@ bool ShowConfigDBUUIDToFQName::ProcessRequestCommon(
 
     vector<ConfigDBFQNameCacheEntry> dest_buffer;
     ConfigDBFQNameCacheEntry entry;
-    if (request->get_uuid().length()) {
+    if (req->get_uuid().length()) {
         ConfigDBFQNameCacheEntry entry;
-        if (ccmgr->config_db_client()->UUIDToFQNameShow(request->get_uuid(),
+        if (ccmgr->config_db_client()->UUIDToFQNameShow(req->get_uuid(),
                                                         entry)) {
             dest_buffer.push_back(entry);
         }
@@ -2226,9 +2226,9 @@ bool ShowConfigDBUUIDToFQName::ProcessRequestCommon(
                                                     dest_buffer);
     }
     string next_batch;
-    IConfigDBUUIDToFQNameResp *response = new ConfigDBUUIDToFQNameResp();
+    ConfigDBUUIDToFQNameResp *response = new ConfigDBUUIDToFQNameResp();
     if (dest_buffer.size() > page_limit) {
-        dest_buffer.erase(dest_buffer.back());
+        dest_buffer.pop_back();
         next_batch = dest_buffer.back().get_uuid();
     }
     response->set_fqname_cache(dest_buffer);
