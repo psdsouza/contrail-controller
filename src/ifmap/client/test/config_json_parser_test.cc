@@ -204,7 +204,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_FQNameCache) {
                                                      ("virtual_network:vn2")
                                                      ("virtual_network:vn3");
     ifmap_sandesh_context_->set_page_limit(3);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 3);
     string next_batch;
     Sandesh::set_response_callback(boost::bind(
         &ConfigJsonParserTest::ValidateFQNameCacheResponse, this,
@@ -230,7 +229,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_FQNameCache_SpecificUUID) {
 
     vector<string> fq_name_expected_entries = list_of("virtual_network:vn1");
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     string next_batch;
     validate_done_ = false;
     Sandesh::set_response_callback(boost::bind(
@@ -257,7 +255,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_FQNameCache_InvalidUUID) {
 
     vector<string> fq_name_expected_entries;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     string next_batch;
     validate_done_ = false;
     Sandesh::set_response_callback(boost::bind(
@@ -285,7 +282,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_FQNameCache_ReqIterate) {
     vector<string> fq_name_expected_entries = list_of("virtual_network:vn2")
                                                      ("virtual_network:vn3");
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     string next_batch;
     validate_done_ = false;
     Sandesh::set_response_callback(boost::bind(
@@ -314,7 +310,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_FQNameCache_ReqIterate_Deleted) {
     vector<string> fq_name_expected_entries = list_of("virtual_network:vn1")
                                                      ("virtual_network:vn2");
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     string next_batch = "634ae160-d3ef-4e82-b58d-d196211eb4da";
     validate_done_ = false;
     Sandesh::set_response_callback(boost::bind(
@@ -344,7 +339,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_ObjectCache) {
                ("634ae160-d3ef-4e82-b58d-d196211eb4da")
                ("634ae160-d3ef-4e83-b58d-d196211eb4db");
     ifmap_sandesh_context_->set_page_limit(3);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 3);
     string next_batch;
 
     validate_done_ = false;
@@ -372,7 +366,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_ObjectCache_SpecificUUID) {
     vector<string> obj_cache_expected_entries =
         list_of("634ae160-d3ef-4e81-b58d-d196211eb4d9");
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     string next_batch;
     validate_done_ = false;
     Sandesh::set_response_callback(boost::bind(
@@ -398,7 +391,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_ObjectCache_InvalidUUID) {
     TASK_UTIL_EXPECT_TRUE(NodeLookup("virtual-network", "vn3") != NULL);
 
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     validate_done_ = false;
     string next_batch;
     vector<string> obj_cache_expected_entries;
@@ -429,7 +421,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_ObjectCache_ReqIterate) {
                ("634ae160-d3ef-4e83-b58d-d196211eb4db");
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     string next_batch;
 
     Sandesh::set_response_callback(boost::bind(
@@ -457,7 +448,6 @@ TEST_F(ConfigJsonParserTest, IntrospectVerify_ObjectCache_ReqIterate_Deleted) {
 
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     vector<string> obj_cache_expected_entries =
         list_of("634ae160-d3ef-4e81-b58d-d196211eb4d9")
                ("634ae160-d3ef-4e82-b58d-d196211eb4da");

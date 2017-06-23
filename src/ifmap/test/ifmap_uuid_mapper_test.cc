@@ -311,7 +311,6 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingReq) {
     string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapUuidToNodeMappingResponse,
@@ -361,7 +360,6 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapUuidToNodeMappingIterate) {
     string next_batch;
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapUuidToNodeMappingResponse,
@@ -595,7 +593,6 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReq) {
     string next_batch = list_of("43d086ab-52c4-4a1f-8c3d-63b321e36e8a");
         validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapNodeToUuidMappingResponse,
@@ -646,7 +643,6 @@ TEST_P(IFMapVmUuidMapperTestWithParam3, ShowIFMapNodeToUuidReqIterate) {
     string next_batch;
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     Sandesh::set_response_callback(
         boost::bind(
             &IFMapVmUuidMapperTest::ValidateIFMapNodeToUuidMappingResponse,
@@ -808,7 +804,6 @@ TEST_P(IFMapVmUuidMapperTestWithParam1, ShowIFMapPendingVmRegOneShot) {
         ("default-global-system-config:a1s27.contrail.juniper.net:93e76278-1990-4905-a472-8e9188f41b2c");
     validate_done_ = false;
     ifmap_sandesh_context_->set_page_limit(3);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 3);
     Sandesh::set_response_callback(
         boost::bind(&IFMapVmUuidMapperTest::ValidateIFMapPendingVmRegResponse,
                     this, _1, pending_vm_reg_expected_entries));
@@ -873,7 +868,6 @@ TEST_P(IFMapVmUuidMapperTestWithParam1, ShowIFMapPendingVmRegTwoStepResponse) {
     validate_done_ = false;
     validate_subsequent_and_final_response_ = true;
     ifmap_sandesh_context_->set_page_limit(2);
-    TASK_UTIL_EXPECT_TRUE(ifmap_sandesh_context_->page_limit() == 2);
     Sandesh::set_response_callback(
         boost::bind(&IFMapVmUuidMapperTest::ValidateIFMapPendingVmRegResponse,
                     this, _1, pending_vm_reg_expected_entries));
@@ -1159,7 +1153,7 @@ INSTANTIATE_TEST_CASE_P(
         "controller/src/ifmap/testdata/cli1_vn1_vm3_add_vmname.json"));
 
 INSTANTIATE_TEST_CASE_P(
-    UuidMapper, IFMapVmUuidMapperTestWithParam3,
+    UuidMapper3, IFMapVmUuidMapperTestWithParam3,
     ::testing::Values(
         "controller/src/ifmap/testdata/cli1_vn1_vm3_add_vmname.json"));
 
