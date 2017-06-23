@@ -1162,6 +1162,7 @@ INSTANTIATE_TEST_CASE_P(
 INSTANTIATE_TEST_CASE_P(
     UuidMapper3, IFMapVmUuidMapperTestWithParam3,
     ::testing::Values(
+        "controller/src/ifmap/testdata/cli1_vn1_vm3_add_vmname.json",
         "controller/src/ifmap/testdata/cli1_vn1_vm3_add_vmname.json"));
 
 struct ConfigFileNames {
