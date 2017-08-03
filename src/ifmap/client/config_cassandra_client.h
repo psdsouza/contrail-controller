@@ -71,6 +71,14 @@ public:
                             uint32_t num_entries,
                             std::vector<ConfigDBUUIDCacheEntry> &entries) const;
 
+    void InsertInRetrySet(const string &uuid, string &obj_type);
+    
+    void RemoveFromRetrySet(const string &uuid);
+    
+    void UUIDRetryTimerExpired(string &uuid);
+
+    void UUIDRetryTimerErrorHandler(string error_name, string error_message);
+
 private:
     friend class ConfigCassandraClient;
 
@@ -84,12 +92,39 @@ private:
         std::string obj_type;
         std::string uuid;
     };
+    static const uint32_t kInitialUUIDRetryTimeUSec = 1000000;
+    static const uint32_t kMaxUUIDRetryTimePowOfTwo = 16;
+
+    struct UUIDRetryInfo {
+        UUIDRetryInfo(const std::string &uuid, std::string &obj_type, 
+        ConfigCassandraPartition *parent) : obj_type(object_type), 
+        retry_count(0),
+            retry_timer(TimerManager::CreateTimer(evm_->io_service(),
+                "UUID retry timer for " + uuid,
+                TaskScheduler::GetInstance()->GetTaskId("cassandra::Reader"),
+                GetTaskInstance())), parent(parent), last_retry_timestamp(0) {
+                retry_timer->Start(kInitialUUIDRetryTimeUSec,
+                boost::bind(UUIDRetryTimerExpired, this, uuid),
+                boost::bind(UUIDRetryTimerErrorHandler, this, uuid, _1, _2));         
+        }
+        ~UUIDRetryInfo() {
+            retry_timer->Cancel();
+            TimerManager::DeleteTimer(retry_timer);
+        }
+        std::string obj_type;
+        uint32_t retry_count;
+        Timer *retry_timer;
+        ConfigCassandraPartition *parent;
+        uint64_t last_retry_tstamp;
+    };
 
     typedef std::map<std::string, ObjectProcessRequestType *> UUIDProcessSet;
     typedef std::pair<uint64_t, bool> FieldTimeStampInfo;
     typedef std::map<std::string, FieldTimeStampInfo> FieldDetailMap;
     // Map of UUID to Field mapping
     typedef std::map<std::string, FieldDetailMap> ObjectCacheMap;
+    // Map of UUID to UUIDRetryInfo used to retry out of order parent or ref
+    typedef std::map<string, UUIDRetryInfo *> UUIDRetrySet;
 
     bool RequestHandler(ObjectProcessReq *req);
     void AddUUIDToRequestList(const std::string &oper,
@@ -115,6 +150,7 @@ private:
     ObjProcessWorkQType obj_process_queue_;
     UUIDProcessSet uuid_read_set_;
     ObjectCacheMap object_cache_map_;
+    UUIDRetrySet uuid_retry_set_;
     boost::shared_ptr<TaskTrigger> config_reader_;
     ConfigCassandraClient *config_client_;
     int worker_id_;

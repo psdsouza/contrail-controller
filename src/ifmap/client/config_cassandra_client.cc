@@ -219,6 +219,11 @@ bool ConfigCassandraClient::ReadObjUUIDTable(set<string> *uuid_list) {
 //  only when all key/value pairs for a given list/map property are removed.
 //  Additionally, the resulting DB request only resets the property_set bit, it
 //  does not clear the entries in the backend.
+//  
+//  parent_or_ref_fq_name_unknown indicates that at least one parent or 
+//  ref cannot be found in the FQNameCache, this can happen if the parent or 
+//  referred object is not yet read. 
+
 struct ConfigCassandraParseContext {
     ConfigCassandraParseContext() : obj_type(""), fq_name_present(false) {
     }
@@ -227,6 +232,7 @@ struct ConfigCassandraParseContext {
     std::set<std::string> candidate_list_map_properties;
     std::string obj_type;
     bool fq_name_present;
+    bool parent_or_ref_fq_name_unknown;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ConfigCassandraParseContext);
@@ -250,9 +256,16 @@ bool ConfigCassandraClient::ProcessObjUUIDTableEntry(const string &uuid_key,
             "Parsing row response for type/fq_name failed for table",
             kUuidTableName, uuid_key);
         HandleObjectDelete(uuid_key);
+        GetPartition(uuid_key)->RemoveFromRetrySet(uuid);
         return false;
     }
 
+    if (context.parent_or_ref_fq_name_unknown) {
+        GetPartition(uuid_key)->InsertInRetrySet(uuid, context.obj_type);
+    } else {
+        GetPartition(uuid_key)->RemoveFromRetrySet(uuid);
+    }
+        
     GetPartition(uuid_key)->ListMapPropReviseUpdateList(uuid_key, context);
 
     // Read the context for map and list properties
@@ -737,6 +750,40 @@ void ConfigCassandraPartition::RemoveObjReqEntry(string &uuid) {
     uuid_read_set_.erase(req_it);
 }
 
+void ConfigCassandraPartition::InsertInRetrySet(const string &uuid,
+                                                string &obj_type) {
+    UUIDRetrySet::iterator it = uuid_retry_set_.find(uuid);
+    if (it != uuid_retry_set_.end()) {
+        UUIDRetryInfo *retry_info = it->second;
+        uint32_t time_pow_of_two =
+            retry_info->retry_count > kMaxUIDRetryTimePowOfTwo ?
+                kMaxUIDRetryTimePowOfTwo : retry_info->retry_count;
+        retry_info->retry_timer->Reschedule((2^pow_of_two)*1000000);
+    } else {
+        UUIDRetryInfo *retry_info = new UUIDRetryInfo(uuid, obj_type);
+        uuid_retry_set_.insert(uuid, retry_info);
+    }
+}
+
+void ConfigCassandraPartition::RemoveFromRetrySet(const string &uuid) {
+    UUIDRetrySet::iterator it = uuid_retry_set_.find(uuid);
+    if (it != uuid_retry_set_.end()) {
+        delete it->second;
+        uuid_retry_set_.erase(uuid);
+    }
+}
+
+void ConfigCassandraPartition::UUIDRetryTimerExpired(string &uuid) {
+    config_client_>mgr_->EnqueueUUIDRequest("UPDATE", obj_type, uuid);
+    retry_count++;
+}
+
+void ConfigCassandraPartition::UUIDRetryTimerErrorHandler(
+    string error_name, string error_message) {
+     CONFIG_CASS_CLIENT_DEBUG(ConfigCassandraPartitionTimerErrorMessage,
+         "Timer error while retrying obj with unresloved ref/parent");
+}
+
 void ConfigCassandraPartition::ListMapPropReviseUpdateList(
     const string &uuid, ConfigCassandraParseContext &context) {
     for (std::set<std::string>::iterator it =
@@ -795,6 +842,7 @@ bool ConfigCassandraPartition::StoreKeyIfUpdated(const string &uuid,
         string ref_uuid = key.substr(from_back_pos+1);
         string ref_name = client()->UUIDToFQName(ref_uuid).second;
         if (ref_name == "ERROR") {
+            context.parent_or_ref_fq_name_unknown = true;
             return false;
         }
         field_name = key.substr(0, from_back_pos+1) + ref_name;
