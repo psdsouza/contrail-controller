@@ -153,7 +153,14 @@ void ConfigAmqpClient::RabbitMQReader::ConnectToRabbitMQ(bool queue_delete) {
             return;
         string uri = amqpclient_->FormAmqpUri();
         try {
-            channel_->CreateFromUri(uri);
+            if (amqpclient_->rabbitmq_use_ssl()) {
+                channel_->CreateSecureFromUri(
+                    uri, amqpclient->rabbitmq_ssl_ca_certs(),
+                    amqpclient->rabbitmq_ssl_keyfile(),
+                    amqpclient->rabbitmq_ssl_certfile());
+            } else {
+                channel_->CreateFromUri(uri);
+            }
             // passive = false, durable = false, auto_delete = false
             channel_->DeclareExchange("vnc_config.object-update",
               AmqpClient::Channel::EXCHANGE_TYPE_FANOUT, false, false, false);
