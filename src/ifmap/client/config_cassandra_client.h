@@ -64,12 +64,10 @@ public:
 
     void Enqueue(ObjectProcessReq *req);
 
-    bool UUIDToObjCacheShow(const std::string &uuid,
-                            ConfigDBUUIDCacheEntry &entry) const;
-
-    bool UUIDToObjCacheShow(const std::string &start_uuid,
-                            uint32_t num_entries,
-                            std::vector<ConfigDBUUIDCacheEntry> &entries) const;
+    bool UUIDToObjCacheShow(
+        regex search_expr, const std::string &start_uuid,
+        uint32_t num_entries,
+        std::vector<ConfigDBUUIDCacheEntry> &entries) const;
 
 private:
     friend class ConfigCassandraClient;
@@ -181,19 +179,15 @@ public:
     virtual void InvalidateFQNameCache(const std::string &uuid);
     void PurgeFQNameCache(const std::string &uuid);
 
-    virtual bool UUIDToFQNameShow(const std::string &uuid,
-                                  ConfigDBFQNameCacheEntry &entry) const;
+    virtual bool UUIDToFQNameShow(
+        regex &search_expr, const std::string &last_uuid,
+        uint32_t num_entries,
+        std::vector<ConfigDBFQNameCacheEntry> &entries) const;
 
-    virtual bool UUIDToFQNameShow(const std::string &start_uuid,
-                      uint32_t num_entries,
-                      std::vector<ConfigDBFQNameCacheEntry> &entries) const;
-
-    virtual bool UUIDToObjCacheShow(int inst_num, const std::string &uuid,
-                                  ConfigDBUUIDCacheEntry &entry) const;
-
-    virtual bool UUIDToObjCacheShow(int inst_num, const std::string &start_uuid,
-                      uint32_t num_entries,
-                      std::vector<ConfigDBUUIDCacheEntry> &entries) const;
+    virtual bool UUIDToObjCacheShow(
+        regex &search_expr, int inst_num, const std::string &start_uuid,
+        uint32_t num_entries,
+        std::vector<ConfigDBUUIDCacheEntry> &entries) const;
 
 protected:
     typedef std::pair<std::string, std::string> ObjTypeUUIDType;

@@ -471,8 +471,7 @@ response sandesh IFMapPendingVmRegResp {
  * @cli_name: read uuid-fqname mapping
  */
 request sandesh ConfigDBUUIDToFQNameReq {
-    /** uuid for which fq-name is needed */
-    1: string uuid;
+    1: string search_string;
 }
 
 struct ConfigDBFQNameCacheEntry {
@@ -494,8 +493,8 @@ response sandesh ConfigDBUUIDToFQNameResp {
  * @cli_name: read uuid cache
  */
 request sandesh ConfigDBUUIDCacheReq {
-    /** uuid whose cache information is required */
-    1: string uuid;
+    /** search string for uuid whose obj cache information is required */
+    1: string search_string;
 }
 
 struct ConfigDBUUIDCacheData {
