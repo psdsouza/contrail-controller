@@ -2053,6 +2053,7 @@ TYPED_TEST(ServiceChainTest, DeleteRoutingInstance2) {
         "controller/src/bgp/testdata/service_chain_1.xml");
 
     this->VerifyRoutingInstanceExists("blue-i1");
+    this->VerifyServiceChainSandesh(this, list_of("blue-i1"));
     this->SetLifetimeManagerQueueDisable(true);
     this->RemoveRoutingInstance("blue-i1", "blue");
     this->ClearServiceChainInformation("blue-i1");
