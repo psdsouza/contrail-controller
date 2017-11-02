@@ -217,12 +217,15 @@ void GetConnectionInfoMessage(
 
     size_t num_connections(cinfos.size());
     size_t num_unexpected_connections(unexpected_cinfos.size());
+    size_t num_missing_connections =  expected_connections.size() -
+        (num_connections - num_unexpected_connections);
     message = "Number of connections:" + integerToString(num_connections) +
         ", Expected:" + integerToString(expected_connections.size()) +
-        ", Unexpected:" + integerToString(num_unexpected_connections);
+        ", Unexpected:" + integerToString(num_unexpected_connections) +
+        ", Missing:" + integerToString(num_missing_connections);
     if (num_unexpected_connections != 0) {
         size_t i = 0;
-        message += " Extra: ";
+        message += " Extra:- ";
         // find the extra connection
         for (std::vector<ConnectionInfo>::const_iterator it = 
         unexpected_cinfos.begin();
@@ -239,12 +242,10 @@ void GetConnectionInfoMessage(
             }
         }
     }
-    size_t num_missing_connections =  expected_connections.size() -
-        (num_connections - num_unexpected_connections);
      if (num_missing_connections !=0) {
         // find the missing connection
         size_t i = 0;
-        message += " Missing: ";
+        message += " Missing:- ";
         for (std::vector<ConnectionTypeName>::const_iterator it =
              expected_connections.begin(); it != expected_connections.end();
              it++) {
