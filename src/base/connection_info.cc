@@ -218,9 +218,8 @@ void GetConnectionInfoMessage(
     size_t num_connections(cinfos.size());
     size_t num_unexpected_connections(unexpected_cinfos.size());
     message = "Number of connections:" + integerToString(num_connections) +
-              ", Unexpected:" + 
-              integerToString(num_unexpected_connections) +
-              " ,Expected:" + integerToString(expected_connections.size());
+        " ,Expected:" + integerToString(expected_connections.size()) +
+        " ,Unexpected:" + integerToString(num_unexpected_connections);
     if (num_unexpected_connections != 0) {
         size_t i = 0;
         message += " Extra: ";

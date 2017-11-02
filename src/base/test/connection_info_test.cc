@@ -131,13 +131,13 @@ TEST_F(ConnectionInfoTest, Callback) {
     // Expected connection more than conn_info
     GetProcessStateCb(vcinfo, pstate, message2, expected_connections);
     EXPECT_EQ(ProcessState::NON_FUNCTIONAL, pstate);
-    EXPECT_EQ("Number of connections:1, Unexpected:0, Expected:2 Missing:" 
+    EXPECT_EQ("Number of connections:1, Expected:2, Unexpected:0 Missing: "
     "Test:Test2", message2); // 2 expected connections are more than conn_info
     expected_connections.push_back(ConnectionTypeName("Test","Test3"));
     std::string message3;
     GetProcessStateCb(vcinfo, pstate, message3, expected_connections);
     EXPECT_EQ(ProcessState::NON_FUNCTIONAL, pstate);
-    EXPECT_EQ("Number of connections:1, Unexpected:0, Expected:3 Missing:"
+    EXPECT_EQ("Number of connections:1, Expected:3, Unexpected:0 Missing: "
     "Test:Test2,Test:Test3", message3);
     expected_connections.pop_back();
     UpdateConnInfo("Test2", ConnectionStatus::DOWN, "Test2 DOWN", &vcinfo);
@@ -150,7 +150,7 @@ TEST_F(ConnectionInfoTest, Callback) {
     // More connection in conn_info than expected_connections
     GetProcessStateCb(vcinfo, pstate, message5, expected_connections);
     EXPECT_EQ(ProcessState::NON_FUNCTIONAL, pstate);
-    EXPECT_EQ("Number of connections:3, Unexpected:1, Expected:2 Extra:"
+    EXPECT_EQ("Number of connections:3, Expected:2, Unexpected:1 Extra: "
     "Test:Test3", message5);
     std::string message6;
     expected_connections.push_back(ConnectionTypeName("Test","Test3"));
