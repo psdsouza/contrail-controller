@@ -163,8 +163,8 @@ TEST_F(ConnectionInfoTest, Callback) {
     expected_connections.push_back(ConnectionTypeName("Test","Test5"));
     expected_connections.push_back(ConnectionTypeName("Test","Test6"));
     GetProcessStateCb(vcinfo, pstate, message7, expected_connections);
-    EXPECT_EQ("Number of connections:3, Expected:2, Unexpected:1 Extra: "
-    "Test:Test3", message7);
+    EXPECT_EQ("Number of connections:4, Expected:4, Unexpected:2 Extra: "
+              "Test:Test3,Test Missing: Test:Test5,Test:Test6", message7);
 
 }
 
