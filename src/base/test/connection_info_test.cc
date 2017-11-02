@@ -157,6 +157,15 @@ TEST_F(ConnectionInfoTest, Callback) {
     GetProcessStateCb(vcinfo, pstate, message6, expected_connections);
     EXPECT_EQ(ProcessState::NON_FUNCTIONAL, pstate);
     EXPECT_EQ("Test:Test2, Test:Test3 connection down", message6);
+    std::string message7;
+    expected_connections.pop_back();
+    UpdateConnInfo("", ConnectionStatus::UP, "Test4 UP", &vcinfo);
+    expected_connections.push_back(ConnectionTypeName("Test","Test5"));
+    expected_connections.push_back(ConnectionTypeName("Test","Test6"));
+    GetProcessStateCb(vcinfo, pstate, message7, expected_connections);
+    EXPECT_EQ("Number of connections:3, Expected:2, Unexpected:1 Extra: "
+    "Test:Test3", message7);
+
 }
 
 int main(int argc, char *argv[]) {
