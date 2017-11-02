@@ -227,6 +227,7 @@ void GetConnectionInfoMessage(
         for (std::vector<ConnectionInfo>::const_iterator it = 
         unexpected_cinfos.begin();
             it != unexpected_cinfos.end(); it++) {
+            i++;
             const ConnectionInfo &cinfo(*it);
             ConnectionTypeName con_info(cinfo.get_type(), cinfo.get_name());
             message += con_info.first;
