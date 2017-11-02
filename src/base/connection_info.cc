@@ -212,7 +212,7 @@ void FindUnexpectedConnections(
 void GetConnectionInfoMessage(
     const std::vector<ConnectionInfo> &cinfos,
     const std::vector<ConnectionTypeName> &expected_connections,
-    const std::vector<ConnectionInfo> &unxecpected_cinfos,
+    const std::vector<ConnectionInfo> &unexpected_cinfos,
     std::string &message) {
 
     size_t num_connections(cinfos.size());
@@ -239,10 +239,9 @@ void GetConnectionInfoMessage(
             }
         }
     }
-    size_t num_missing_connections =  num_expected_connections -
-        (num_connectections - num_unexpected_connections);
-     if (missing_connections !=0)
-        < num_expected_connections) {
+    size_t num_missing_connections =  expected_connections.size() -
+        (num_connections - num_unexpected_connections);
+     if (missing_connections !=0) {
         // find the missing connection
         size_t i = 0;
         message += " Missing: ";
