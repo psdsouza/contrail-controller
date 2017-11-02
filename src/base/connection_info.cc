@@ -241,7 +241,7 @@ void GetConnectionInfoMessage(
     }
     size_t num_missing_connections =  expected_connections.size() -
         (num_connections - num_unexpected_connections);
-     if (missing_connections !=0) {
+     if (num_missing_connections !=0) {
         // find the missing connection
         size_t i = 0;
         message += " Missing: ";

@@ -43,6 +43,7 @@ void GetProcessStateCb(const std::vector<ConnectionInfo> &cinfos,
     const std::vector<ConnectionTypeName> &expected_connections);
 void GetConnectionInfoMessage(const std::vector<ConnectionInfo> &cinfos,
     const std::vector<ConnectionTypeName> &expected_connections,
+    const std::vector<ConnectionTypeName> &unexpected_connections,
     std::string &message);
 
 // ConnectionState
