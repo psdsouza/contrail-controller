@@ -3382,7 +3382,7 @@ TYPED_TEST(ServiceChainTest, ExtConnectedEcmptoNonEcmpPaths) {
     this->VerifyRouteAttributes("blue", this->BuildPrefix("10.10.1.0", 24),
                                 path_ids, "red");
 
-    this->AddRoute(NULL, "red", this->BuildPrefix("192.168.1.1", 32), 100,
+    this->AddRoute(NULL, "red", this->BuildPrefix("10.10.1.0", 24), 100,
                    vector<uint32_t>(), vector<uint32_t>(), set<string>(),
                    SiteOfOrigin(), "7.8.9.2");
     this->VerifyRouteExists("red", this->BuildPrefix("10.10.1.0", 24));
