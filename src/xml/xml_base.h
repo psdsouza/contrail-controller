@@ -7,6 +7,7 @@
 
 #include "base/util.h"
 
+
 class XmlBase {
 
 public:

@@ -32,6 +32,16 @@ class EndOfRibRxTimer;
 class LlgrStaleTimer;
 class ControllerEcmpRoute;
 
+class XmlWriter : public pugi::xml_writer {
+public:
+    explicit XmlWriter(std::string *repr) : repr_(repr) { }
+    virtual void write(const void *data, size_t size) {
+        repr_->append(static_cast<const char*>(data), size);
+    }
+private:
+    std::string *repr_;
+};
+
 class AgentXmppChannel {
 public:
     AgentXmppChannel(Agent *agent,
@@ -40,7 +50,7 @@ public:
     virtual ~AgentXmppChannel();
 
     virtual std::string ToString() const;
-    virtual bool SendUpdate(uint8_t *msg, size_t msgsize);
+    virtual bool SendUpdate(const uint8_t *msg, size_t msgsize);
     virtual void ReceiveUpdate(const XmppStanza::XmppMessage *msg);
     virtual void ReceiveEvpnUpdate(XmlPugi *pugi);
     virtual void ReceiveMulticastUpdate(XmlPugi *pugi);
