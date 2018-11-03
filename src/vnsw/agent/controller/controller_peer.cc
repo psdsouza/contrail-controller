@@ -1734,7 +1734,7 @@ bool AgentXmppChannel::ControllerSendVmCfgSubscribe(AgentXmppChannel *peer,
     vm += vmid.str();
     pugi->AddAttribute("node", vm);
 
-    const pugi::xml_document doc = pugi->doc();
+    pugi::xml_document doc = pugi->doc();
     doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     CONTROLLER_TX_CONFIG_TRACE(Trace, peer->GetXmppServerIdx(),
                                peer->GetBgpPeerName(), "", repr);
