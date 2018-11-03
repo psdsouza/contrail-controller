@@ -1734,8 +1734,8 @@ bool AgentXmppChannel::ControllerSendVmCfgSubscribe(AgentXmppChannel *peer,
     vm += vmid.str();
     pugi->AddAttribute("node", vm);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     CONTROLLER_TX_CONFIG_TRACE(Trace, peer->GetXmppServerIdx(),
                                peer->GetBgpPeerName(), "", repr);
     // send data
@@ -1776,8 +1776,8 @@ bool AgentXmppChannel::ControllerSendCfgSubscribe(AgentXmppChannel *peer) {
     node  = node + XmppInit::kFqnPrependAgentNodeJID  + peer->channel_->FromString();
     pugi->AddAttribute("node", node);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     CONTROLLER_TX_CONFIG_TRACE(Trace, peer->GetXmppServerIdx(),
                                peer->GetBgpPeerName(), "", repr);
     // send data
@@ -1829,8 +1829,8 @@ bool AgentXmppChannel::ControllerSendSubscribe(AgentXmppChannel *peer,
     vrf_id << vrf->rd();
     pugi->AddChildNode("instance-id", vrf_id.str());
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     if (peer->SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()),
                          repr.length()) == false) {
@@ -1962,8 +1962,8 @@ bool AgentXmppChannel::ControllerSendV4V6UnicastRouteCommon(AgentRoute *route,
     //Call Auto-generated Code to encode the struct
     item.Encode(&node);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     repr.clear();
@@ -1986,8 +1986,8 @@ bool AgentXmppChannel::ControllerSendV4V6UnicastRouteCommon(AgentRoute *route,
     }
     pugi->AddAttribute("node", node_id);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     end_of_rib_tx_timer()->last_route_published_time_ = UTCTimestampUsec();
@@ -2310,8 +2310,8 @@ bool AgentXmppChannel::BuildAndSendEvpnDom(EnetItemType &item,
     //Call Auto-generated Code to encode the struct
     item.Encode(&node);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     repr.clear();
@@ -2334,8 +2334,8 @@ bool AgentXmppChannel::BuildAndSendEvpnDom(EnetItemType &item,
     }
     pugi->AddAttribute("node", node_id);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     end_of_rib_tx_timer()->last_route_published_time_ = UTCTimestampUsec();
@@ -2471,8 +2471,8 @@ bool AgentXmppChannel::ControllerSendMcastRouteCommon(AgentRoute *route,
     //Call Auto-generated Code to encode the struct
     item.Encode(&node);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     repr.clear();
@@ -2495,8 +2495,8 @@ bool AgentXmppChannel::ControllerSendMcastRouteCommon(AgentRoute *route,
     }
     pugi->AddAttribute("node", node_id);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     end_of_rib_tx_timer()->last_route_published_time_ = UTCTimestampUsec();
@@ -2570,8 +2570,8 @@ bool AgentXmppChannel::ControllerSendMvpnRouteCommon(AgentRoute *route,
     //Call Auto-generated Code to encode the struct
     item.Encode(&node);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     repr.clear();
@@ -2594,8 +2594,8 @@ bool AgentXmppChannel::ControllerSendMvpnRouteCommon(AgentRoute *route,
     }
     pugi->AddAttribute("node", node_id);
 
-    const pugi::xml_document *doc = pugi->doc();
-    doc->print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
+    const pugi::xml_document doc = pugi->doc();
+    doc.print(*xml_writer, "", pugi::format_default, pugi::encoding_utf8);
     // send data for BgpAf::Mvpn
     SendUpdate(reinterpret_cast<const uint8_t *>(repr.c_str()), repr.length());
     end_of_rib_tx_timer()->last_route_published_time_ = UTCTimestampUsec();
